@@ -89,6 +89,11 @@ static int finishScreen = 0;
 // Gameplay Screen Initialization logic
 Texture2D back_jogo;
 Image resback_jogo;
+
+//Texture2D alien;
+Image alien;
+Texture2D alien_alien;
+
 void InitJogoScreen(void)
 {
     // TODO: Initialize GAMEPLAY screen variables here!
@@ -98,7 +103,12 @@ void InitJogoScreen(void)
     ImageResize(&resback_jogo, GetScreenWidth(), GetScreenHeight());
     back_jogo = LoadTextureFromImage(resback_jogo);
     
+    
+    
      brickSize = (Vector2){ GetScreenWidth()/BRICKS_PER_LINE, 40 };
+     alien = LoadImage("resources/alien.png");
+    ImageResize(&alien, brickSize.x, brickSize.y);
+    alien_alien = LoadTextureFromImage(alien);
 
     // Initialize player
     player.position = (Vector2){ screenWidth/2, screenHeight*7/8 };
@@ -125,12 +135,12 @@ void InitJogoScreen(void)
 }
     
 
-
+int cont=0;
 // Gameplay Screen Update logic
 void UpdateJogoScreen(void)
 {
     // TODO: Update GAMEPLAY screen variables here!
-
+	//int cont=0;
     // Press enter or tap to change to ENDING screen
     if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
     {
@@ -208,6 +218,7 @@ void UpdateJogoScreen(void)
                         {
                             brick[i][j].active = false;
                             ball.speed.y *= -1;
+                            cont++;
                         }
                         // Hit above
                         else if (((ball.position.y + ball.radius) >= (brick[i][j].position.y - brickSize.y/2)) &&
@@ -216,6 +227,7 @@ void UpdateJogoScreen(void)
                         {
                             brick[i][j].active = false;
                             ball.speed.y *= -1;
+                            cont++;
                         }
                         // Hit left
                         else if (((ball.position.x + ball.radius) >= (brick[i][j].position.x - brickSize.x/2)) &&
@@ -224,6 +236,7 @@ void UpdateJogoScreen(void)
                         {
                             brick[i][j].active = false;
                             ball.speed.x *= -1;
+                            cont++;
                         }
                         // Hit right
                         else if (((ball.position.x - ball.radius) <= (brick[i][j].position.x + brickSize.x/2)) &&
@@ -232,6 +245,7 @@ void UpdateJogoScreen(void)
                         {
                             brick[i][j].active = false;
                             ball.speed.x *= -1;
+                            cont++;
                         }
                     }
                 }
@@ -271,10 +285,11 @@ void UpdateJogoScreen(void)
 void DrawJogoScreen(void)
 {
     // TODO: Draw GAMEPLAY screen here!
-    //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
+   // DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
     //DrawTextEx(font, "JOGO", (Vector2){ 20, 10 }, font.baseSize*3, 4, MAROON);
     //DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
      DrawTexture(back_jogo, 0, 0, WHITE);
+     //ImageDrawRectangle(&alien, 20, 20, 30, 30, WHITE);
      
       ClearBackground(RAYWHITE);
 
@@ -296,17 +311,22 @@ void DrawJogoScreen(void)
                 {
                     if (brick[i][j].active)
                     {
-                        if ((i + j) % 2 == 0) DrawRectangle(brick[i][j].position.x - brickSize.x/2, brick[i][j].position.y - brickSize.y/2, brickSize.x, brickSize.y, GRAY);
-                        else DrawRectangle(brick[i][j].position.x - brickSize.x/2, brick[i][j].position.y - brickSize.y/2, brickSize.x, brickSize.y, DARKGRAY);
+                    //DrawTexture(alien_alien,brickSize.x, brickSize.y,WHITE);
+                        if ((i + j) % 2 == 0) DrawTexture(alien_alien, brick[i][j].position.x - brickSize.x/2, brick[i][j].position.y - brickSize.y/2, WHITE);
+                        else DrawTexture(alien_alien, brick[i][j].position.x - brickSize.x/2, brick[i][j].position.y - brickSize.y/2, WHITE);
                     }
                 }
             }
 
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, WHITE);
         }
-        else DrawText("SUA PONTUAÇÃO FOI:", GetScreenWidth()/2 - MeasureText("SUA PONTUAÇÃO FOI", 50)/2, GetScreenHeight()/2 - 50, 50, WHITE);
+        else DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), 130, 220, 30, WHITE);
         
+//Texture2D texture = LoadTextureFromImage(alien); 
+// DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 300, 15, WHITE);
+//DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), GetScreenWidth()/2 - MeasureText("SUA PONTUAÇÃO FOI %d", cont, 50)/2, GetScreenHeight()/2 - 50, 50, WHITE);
 }
+
 
 // Gameplay Screen Unload logic
 void UnloadJogoScreen(void)
