@@ -23,6 +23,9 @@
 *
 **********************************************************************************************/
 
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 #include "raylib.h"
 #include "screens.h"
 
@@ -31,6 +34,20 @@
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+
+//Não permite eu declarar a função aqui novamente diz que ela já está declarada, por isso eu tentei só deixar ela definida na screens.h, mas aí da outro problema e fala que eu tenho que incluir a biblioteca stdio em todos os arquivos
+
+// FILE* fopen_e_teste(char* caminho, char* modo)
+// {
+//     FILE* f;
+//     f = fopen(caminho, modo);
+//     if(f == NULL)
+//     {
+//         perror("Erro ao encontrar ou ler arquivo.\n");
+//         exit(1);
+//     }
+//     return f;
+// }
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -65,11 +82,17 @@ void UpdateIniciarScreen(void)
 // Gameplay Screen Draw logic
 void DrawIniciarScreen(void)
 {
+    FILE* ap;
+    ap = fopen_e_teste("atual_usuario", "r");
+    char n[10];
     // TODO: Draw GAMEPLAY screen here!
    //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
     //DrawTextEx(font, "GAMEPLAY SCREEN", (Vector2){ 20, 10 }, font.baseSize*3, 4, MAROON);
     //DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
     DrawTexture(back_tela4, 0, 0, WHITE);
+
+    fscanf(ap, "%s", n);
+    DrawText(n, 275, 155, 30, WHITE);
 }
 
 // Gameplay Screen Unload logic

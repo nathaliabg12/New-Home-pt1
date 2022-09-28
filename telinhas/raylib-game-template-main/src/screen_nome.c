@@ -23,8 +23,8 @@
 *
 **********************************************************************************************/
 #include "stdio.h"
-#include "string.h"
 #include "stdlib.h"
+#include "string.h"
 #include "raylib.h"
 #include "screens.h"
 #define MAX_INPUT_CHARS     9
@@ -59,7 +59,6 @@ FILE* fopen_e_teste(char* caminho, char* modo)
         perror("Erro ao encontrar ou ler arquivo.\n");
         exit(1);
     }
-
     return f;
 }
 
@@ -141,7 +140,7 @@ void DrawNomeScreen(void)
     FILE* p;
     FILE* at;
     p = fopen_e_teste("dadosusuarios.bin", "ab+");
-    at = fopen_e_teste("atual_usuario.txt", "w");
+    at = fopen_e_teste("atual_usuario.txt", "a");
     jogador player;
 
     //variável para incrementar caso algum nome seja igual ao nome do usuário
@@ -200,10 +199,13 @@ void DrawNomeScreen(void)
         {
             strcpy(atual_player.nome, name);
             fwrite(&atual_player, sizeof(jogador), 1, p);
-            printf("Nome: %s escrito com sucesso!\n\n", atual_player.nome);
+            printf("DE BOA:  %s escrito com sucesso!\n\n", atual_player.nome);
         }
         
-        fputs(atual_player.nome, at);
+        int result = fputs(atual_player.nome, at);
+        if(result == EOF)
+            printf("ALERTA: Erro na gravação do arquivo");
+
         finishScreen = 1;
         PlaySound(fxCoin);
     }
