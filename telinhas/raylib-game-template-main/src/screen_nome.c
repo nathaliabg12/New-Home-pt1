@@ -47,7 +47,7 @@ typedef struct
     float tempo;    
 } jogador;
 
-
+jogador atual_player;
 
 //Função para abertura e leitura do arquivo
 FILE* fopen_e_teste(char* caminho, char* modo)
@@ -67,7 +67,7 @@ FILE* fopen_e_teste(char* caminho, char* modo)
 
 // Nome Screen Functions Definition
 
-char name[MAX_INPUT_CHARS + 1] = "\0";      // NOTE: One extra space required for null terminator char '\0'
+    char name[MAX_INPUT_CHARS + 1] = "\0";      // NOTE: One extra space required for null terminator char '\0'
     int letterCount = 0;
 
     Rectangle textBox = { screenWidth/2.0f - 120, 200, 280, 70 };
@@ -139,8 +139,11 @@ void DrawNomeScreen(void)
 {
 
     FILE* p;
-    p = fopen_e_teste("dadosusuarios.bin", "wb+");
+    FILE* at;
+    p = fopen_e_teste("dadosusuarios.bin", "ab+");
+    at = fopen_e_teste("atual_usuario.txt", "w");
     jogador player;
+
     //variável para incrementar caso algum nome seja igual ao nome do usuário
     int contnames = 0;
 
@@ -180,6 +183,7 @@ void DrawNomeScreen(void)
         DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, WHITE); 
     }
 
+
     // Press enter or tap to change to ENDING screen
     if (IsKeyPressed(KEY_ENTER))
     {
@@ -194,15 +198,18 @@ void DrawNomeScreen(void)
         //Caso não exista realmente nenhum nome como aquele registrado ele será escrito agora
         if(!contnames)
         {
-            fwrite(name, sizeof(char), strlen(name), p);
-            printf("Nome: %s escrito com sucesso!", name);
+            strcpy(atual_player.nome, name);
+            fwrite(&atual_player, sizeof(jogador), 1, p);
+            printf("Nome: %s escrito com sucesso!\n\n", atual_player.nome);
         }
-
+        
+        fputs(atual_player.nome, at);
         finishScreen = 1;
         PlaySound(fxCoin);
     }
         
-        
+    fclose(at);
+    fclose(p);
 }
 
 bool IsAnyKeyPressed()
