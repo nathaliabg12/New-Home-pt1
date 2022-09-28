@@ -179,14 +179,8 @@ void DrawNomeScreen(void)
         //"Deixa apagado"
         DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, WHITE); 
     }
-    // TODO: Draw GAMEPLAY screen here!
-    //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    //DrawTextEx(font, "NOME", (Vector2){ 20, 10 }, font.baseSize*3, 4, MAROON);
-    //DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
-    // DrawTexture(back_nome, 0, 0, WHITE);
 
     // Press enter or tap to change to ENDING screen
-
     if (IsKeyPressed(KEY_ENTER))
     {
 
