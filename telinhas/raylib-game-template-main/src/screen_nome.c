@@ -22,7 +22,9 @@
 *     3. This notice may not be removed or altered from any source distribution.
 *
 **********************************************************************************************/
-
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
 #include "raylib.h"
 #include "screens.h"
 #define MAX_INPUT_CHARS     9
@@ -37,6 +39,32 @@ const int screenWidth = 800;
 const int screenHeight = 450;
 
 //----------------------------------------------------------------------------------
+//Criação da struct para o usuário
+typedef struct 
+{
+    char nome[10];
+    int pontuacao;
+    float tempo;    
+} jogador;
+
+
+
+//Função para abertura e leitura do arquivo
+FILE* fopen_e_teste(char* caminho, char* modo)
+{
+    FILE* f;
+    f = fopen(caminho, modo);
+    if(f == NULL)
+    {
+        perror("Erro ao encontrar ou ler arquivo.\n");
+        exit(1);
+    }
+
+    return f;
+}
+
+
+
 // Nome Screen Functions Definition
 
 char name[MAX_INPUT_CHARS + 1] = "\0";      // NOTE: One extra space required for null terminator char '\0'
@@ -104,49 +132,83 @@ void UpdateNomeScreen(void)
 
         if (mouseOnText) framesCounter++;
         else framesCounter = 0;
-
-    // Press enter or tap to change to ENDING screen
-    if (IsKeyPressed(KEY_ENTER))
-    {
-        finishScreen = 1;
-        PlaySound(fxCoin);
-    }
 }
 
 // Gameplay Screen Draw logic
 void DrawNomeScreen(void)
 {
-   
-   ClearBackground(RAYWHITE);
-   DrawTexture(back_nome, 0, 0, WHITE);
-   //ImageClearBackground(back_nome, WHITE);
 
-            DrawText("INSIRA SEU NOME", 270, 140, 30, WHITE);
+    FILE* p;
+    p = fopen_e_teste("dadosusuarios.bin", "wb+");
+    jogador player;
+    //variável para incrementar caso algum nome seja igual ao nome do usuário
+    int contnames = 0;
 
-            DrawRectangleRec(textBox, WHITE);
-            if (mouseOnText) DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, BLACK);
-            else DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, WHITE);
+    ClearBackground(RAYWHITE);
+    DrawTexture(back_nome, 0, 0, WHITE);
+    
+    DrawText("INSIRA SEU NOME", 270, 140, 30, WHITE);
 
-            DrawText(name, (int)textBox.x + 5, (int)textBox.y + 8, 45, BLACK);
+    //Caixa de texto inteiro
+    DrawRectangleRec(textBox, WHITE);
 
-            DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 300, 15, WHITE);
+    //Tudo isso cabe no if de baixo
+    //Aparece o underline de indicação para escrever o nome
+    // if (mouseOnText) DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, BLACK);
+    // else DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, WHITE); //"Deixa apagado"
 
-            if (mouseOnText)
-            {
-                if (letterCount < MAX_INPUT_CHARS)
-                {
-                    // Draw blinking underscore char
-                    if (((framesCounter/20)%2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(name, 40), (int)textBox.y + 12, 40, BLACK);
-                }
-                else DrawText("Press BACKSPACE to delete chars...", 230, 350, 20, WHITE);
-            }
+    DrawText(name, (int)textBox.x + 5, (int)textBox.y + 8, 45, BLACK);
+
+    DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 300, 15, WHITE);
+
+
+    //
+    if (mouseOnText)
+    {
+        //Aparece o underline de indicação para escrever o nome
+        DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, BLACK);
+        if (letterCount < MAX_INPUT_CHARS)
+        {
+            // Draw blinking underscore char
+            if (((framesCounter/20)%2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(name, 40), (int)textBox.y + 12, 40, BLACK);
+        }
+        else DrawText("Press BACKSPACE to delete chars...", 230, 350, 20, WHITE);
+    }
+    else 
+    {
+        //"Deixa apagado"
+        DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, WHITE); 
+    }
     // TODO: Draw GAMEPLAY screen here!
     //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
     //DrawTextEx(font, "NOME", (Vector2){ 20, 10 }, font.baseSize*3, 4, MAROON);
     //DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
     // DrawTexture(back_nome, 0, 0, WHITE);
-     
-     
+
+    // Press enter or tap to change to ENDING screen
+
+    if (IsKeyPressed(KEY_ENTER))
+    {
+
+        while(fread(&player, sizeof(jogador), 1, p) > 0 && !contnames)
+        {
+            //Se o nome for encontrado alguma vez não precisa mais fazer a leitura do resto do arquivo
+            if(player.nome == name)
+                contnames++;
+        }
+
+        //Caso não exista realmente nenhum nome como aquele registrado ele será escrito agora
+        if(!contnames)
+        {
+            fwrite(name, sizeof(char), strlen(name), p);
+            printf("Nome: %s escrito com sucesso!", name);
+        }
+
+        finishScreen = 1;
+        PlaySound(fxCoin);
+    }
+        
+        
 }
 
 bool IsAnyKeyPressed()
