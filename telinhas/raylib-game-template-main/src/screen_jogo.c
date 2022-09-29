@@ -40,6 +40,31 @@
 
 
 //----------------------------------------------------------------------------------
+// Funcao compara para o qsort
+//----------------------------------------------------------------------------------
+typedef struct 
+{
+     char nome[10];
+     int pontuacao;
+     float tempo;    
+ } jogador;
+
+//----------------------------------------------------------------------------------
+// Funcao compara para o qsort
+//----------------------------------------------------------------------------------
+int compara(const void *a, const void *b){
+    jogador *n1 = (jogador*)a;
+    jogador *n2 = (jogador*)b;
+    
+    if(n1->pontuacao==n2->pontuacao){
+        return n1->tempo - n2->tempo;
+    } 
+    else{
+        return -(n1->pontuacao - n2->pontuacao);
+    }
+}
+
+//----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
 typedef struct Player {
@@ -337,11 +362,11 @@ void DrawJogoScreen(void)
 
             
             //Caixa de texto inteiro
-            DrawRectangleRec(textBox, WHITE);
+            //DrawRectangleRec(textBox, WHITE);
 
-            DrawText(name, (int)textBox.x + 5, (int)textBox.y + 8, 45, BLACK);
+            DrawText(name, (int)textBox.x + 5, (int)textBox.y + 8, 45, WHITE);
 
-            DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 320, 15, WHITE);
+            //DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 320, 15, WHITE);
 
             //
             if (mouseOnText)
