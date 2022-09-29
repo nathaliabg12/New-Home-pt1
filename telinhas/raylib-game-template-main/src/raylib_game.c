@@ -98,7 +98,7 @@ int main(void)
         case NARRACAO1: UnloadNarracao1Screen(); break;
         case NARRACAO2: UnloadNarracao2Screen(); break;
         case REGRAS: UnloadRegrasScreen(); break;
-        case NOME: UnloadNomeScreen(); break;
+        // case NOME: UnloadNomeScreen(); break;
         case INICIAR: UnloadIniciarScreen(); break;
         case JOGO: UnloadJogoScreen(); break;
         case ENDING: UnloadEndingScreen(); break;
@@ -133,7 +133,7 @@ static void ChangeToScreen(int screen)
         case NARRACAO1: UnloadNarracao1Screen(); break;
         case NARRACAO2: UnloadNarracao2Screen(); break;
         case REGRAS: UnloadRegrasScreen(); break;
-        case NOME: UnloadNomeScreen(); break;
+        // case NOME: UnloadNomeScreen(); break;
         case INICIAR: UnloadIniciarScreen(); break;
         case JOGO: UnloadJogoScreen(); break;
         //case RESULTADO: UnloadResultadoScreen(); break;
@@ -150,7 +150,7 @@ static void ChangeToScreen(int screen)
         case NARRACAO1: InitNarracao1Screen(); break;
         case NARRACAO2: InitNarracao2Screen(); break;
         case REGRAS: InitRegrasScreen(); break;
-        case NOME: InitNomeScreen(); break;
+        // case NOME: InitNomeScreen(); break;
         case INICIAR: InitIniciarScreen(); break;
         case JOGO: InitJogoScreen(); break;
         //case RESULTADO: InitResultadoScreen(); break;
@@ -194,7 +194,7 @@ static void UpdateTransition(void)
                 case NARRACAO1: UnloadNarracao1Screen(); break;
                 case NARRACAO2: UnloadNarracao2Screen(); break;
                 case REGRAS: UnloadRegrasScreen(); break;
-                case NOME: UnloadNomeScreen(); break;
+                // case NOME: UnloadNomeScreen(); break;
                 case INICIAR: UnloadIniciarScreen(); break;
                 case JOGO: UnloadJogoScreen(); break;
                 //case RESULTADO: UnloadResultadoScreen(); break;
@@ -211,7 +211,7 @@ static void UpdateTransition(void)
                 case NARRACAO1: InitNarracao1Screen(); break;
                 case NARRACAO2: InitNarracao2Screen(); break;
                 case REGRAS: InitRegrasScreen(); break;
-                case NOME: InitNomeScreen(); break;
+                // case NOME: InitNomeScreen(); break;
                 case INICIAR: InitIniciarScreen(); break;
                 case JOGO: InitJogoScreen(); break;
                 //case RESULTADO: InitResultadoScreen(); break;
@@ -302,19 +302,19 @@ static void UpdateDrawFrame(void)
             {
                 UpdateRegrasScreen();
 
-                if (FinishRegrasScreen() == 1) TransitionToScreen(NOME);
+                if (FinishRegrasScreen() == 1) TransitionToScreen(INICIAR);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
             
-            case NOME:
-            {
-                UpdateNomeScreen();
+            // case NOME:
+            // {
+            //     UpdateNomeScreen();
 
-                if (FinishNomeScreen() == 1) TransitionToScreen(INICIAR);
-                //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+            //     if (FinishNomeScreen() == 1) TransitionToScreen(INICIAR);
+            //     //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
-            } break;
+            // } break;
             
             case INICIAR:
             {
@@ -372,7 +372,7 @@ static void UpdateDrawFrame(void)
             case NARRACAO1: DrawNarracao1Screen(); break;
             case NARRACAO2: DrawNarracao2Screen(); break;
             case REGRAS: DrawRegrasScreen(); break;
-            case NOME: DrawNomeScreen(); break;
+            // case NOME: DrawNomeScreen(); break;
             case INICIAR: DrawIniciarScreen(); break;
             case JOGO: DrawJogoScreen(); break;
             //case RESULTADO: DrawResultadoScreen(); break;

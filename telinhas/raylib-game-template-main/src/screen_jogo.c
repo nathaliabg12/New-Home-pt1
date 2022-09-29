@@ -93,9 +93,12 @@ Image resback_jogo;
 //Texture2D alien;
 Image alien;
 Texture2D alien_alien;
-
+float inittime = 0;
+int cont=0;
 void InitJogoScreen(void)
 {
+    cont = 0;
+    inittime = GetFrameTime();
     // TODO: Initialize GAMEPLAY screen variables here!
     framesCounter = 0;
     finishScreen = 0;
@@ -132,27 +135,28 @@ void InitJogoScreen(void)
             brick[i][j].active = true;
         }
     }
+
 }
     
 
-int cont=0;
+
+float timing = 0;
 // Gameplay Screen Update logic
 void UpdateJogoScreen(void)
 {
     // TODO: Update GAMEPLAY screen variables here!
 	//int cont=0;
     // Press enter or tap to change to ENDING screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        finishScreen = 1;
-        PlaySound(fxCoin);
-    }
+    // if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+    // {
+    //     finishScreen = 1;
+    //     PlaySound(fxCoin);
+    // }
     
     
     if (!gameOver)
     {
         if (IsKeyPressed('P')) pause = !pause;
-
         if (!pause)
         {
             // Player movement logic
@@ -269,17 +273,21 @@ void UpdateJogoScreen(void)
             
         }
     }
-   // else
-   // {
-     //   if (IsKeyPressed(KEY_ENTER))
-    //    {
-       //     InitJogoScreen();
-         //   gameOver = false;
-        //}
-   // }
+   else
+   {
+       if (IsKeyPressed(KEY_ENTER))
+       {
+           InitJogoScreen();
+           gameOver = false;
+        }
+   }
 }
-
-
+#define MAX_INPUT_CHARS     9
+char name[MAX_INPUT_CHARS + 1] = "\0";      // NOTE: One extra space required for null terminator char '\0'
+int letterCount = 0;
+bool mouseOnText = false;
+//caixa de texto
+Rectangle textBox = { 320, 300, 140, 35};
 
 // Gameplay Screen Draw logic
 void DrawJogoScreen(void)
@@ -320,7 +328,46 @@ void DrawJogoScreen(void)
 
             if (pause) DrawText("GAME PAUSED", screenWidth/2 - MeasureText("GAME PAUSED", 40)/2, screenHeight/2 - 40, 40, WHITE);
         }
-        else DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), 130, 220, 30, WHITE);
+        else
+        {
+            DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), 130, 220, 30, WHITE);
+            timing = GetFrameTime();
+            DrawText(TextFormat("Seu tempo foi: %.0f s", (timing*1000)), 130, 260, 30, WHITE);
+            DrawText(TextFormat("Digite seu nickname: "), 130, 300, 30, WHITE);
+
+            
+            //Caixa de texto inteiro
+            DrawRectangleRec(textBox, WHITE);
+
+            DrawText(name, (int)textBox.x + 5, (int)textBox.y + 8, 45, BLACK);
+
+            DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 320, 15, WHITE);
+
+            //
+            if (mouseOnText)
+            {
+                //Aparece o underline de indicação para escrever o nome
+                DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, BLACK);
+                if (letterCount < MAX_INPUT_CHARS)
+                {
+                    // Draw blinking underscore char
+                    if (((framesCounter/20)%2) == 0) DrawText("_", (int)textBox.x + 8 + MeasureText(name, 40), (int)textBox.y + 12, 40, BLACK);
+                }
+                else DrawText("Press BACKSPACE to delete chars...", 400, 360, 10, BLUE);
+            }
+            else 
+            {
+                //"Deixa apagado"
+                DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, WHITE); 
+            }
+
+            //Só sai do jogo se apertar enter dps do game over e se a variável name não for null
+            if (IsKeyPressed(KEY_ENTER) && name)
+            {
+                finishScreen = 1;
+                PlaySound(fxCoin);
+            }
+        } 
         
 //Texture2D texture = LoadTextureFromImage(alien); 
 // DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 300, 15, WHITE);

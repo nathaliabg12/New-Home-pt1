@@ -27,20 +27,21 @@ FILE* fopen_e_teste(char* caminho, char* modo)
 int main()
 {
     FILE* p;
-    FILE* at;
     p = fopen_e_teste("dadosusuarios.bin", "a+b");
-    at = fopen_e_teste("atual_usuario.txt", "w");
 
     jogador bot;
 
-    char name[10] = "Joan";
-    strcpy(bot.nome, name);
-    bot.pontuacao = 15;
-    bot.tempo = 10.5;
+    // char name[10] = "Pedro";
+    // strcpy(bot.nome, name);
+    // bot.pontuacao = 18;
+    // bot.tempo = 8.0;
+    
+    // fwrite(&bot, sizeof(jogador), 1, p);
 
-    fwrite(&bot, sizeof(jogador), 1, p);
-    fputs(name, at);
+    while(fread(&bot, sizeof(jogador), 1, p) > 0)
+    {
+        printf("Nome: %s\n Pontuação: %d\n Tempo: %f\n", bot.nome, bot.pontuacao, bot.tempo);
+    }
 
-    fclose(at);
     fclose(p);
 }

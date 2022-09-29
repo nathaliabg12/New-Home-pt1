@@ -2,7 +2,7 @@
 *
 *   raylib - Advance Game template
 *
-*   Gameplay Screen Functions Definitions (Init, Update, Draw, Unload)
+*   Ending Screen Functions Definitions (Init, Update, Draw, Unload)
 *
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
@@ -23,9 +23,6 @@
 *
 **********************************************************************************************/
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
 #include "raylib.h"
 #include "screens.h"
 
@@ -35,30 +32,30 @@
 static int framesCounter = 0;
 static int finishScreen = 0;
 
-
 //----------------------------------------------------------------------------------
-// Gameplay Screen Functions Definition
+// Ending Screen Functions Definition
 //----------------------------------------------------------------------------------
 
-// Gameplay Screen Initialization logic
-Texture2D back_tela4;
-Image resback_tela4;
-void InitIniciarScreen(void)
+// Ending Screen Initialization logic
+Texture2D back_rank;
+Image resback_rank;
+void InitEndingScreen(void)
 {
-    // TODO: Initialize GAMEPLAY screen variables here!
+    // TODO: Initialize ENDING screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    resback_tela4 = LoadImage("resources/tela4.png");
-    ImageResize(&resback_tela4, GetScreenWidth(), GetScreenHeight());
-    back_tela4 = LoadTextureFromImage(resback_tela4);
+    
+    resback_rank = LoadImage("resources/ranking.png");
+    ImageResize(&resback_rank, GetScreenWidth(), GetScreenHeight());
+    back_rank = LoadTextureFromImage(resback_rank);
 }
 
-// Gameplay Screen Update logic
-void UpdateIniciarScreen(void)
+// Ending Screen Update logic
+void UpdateEndingScreen(void)
 {
-    // TODO: Update GAMEPLAY screen variables here!
+    // TODO: Update ENDING screen variables here!
 
-    // Press enter or tap to change to ENDING screen
+    // Press enter or tap to return to TITLE screen
     if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
     {
         finishScreen = 1;
@@ -66,24 +63,24 @@ void UpdateIniciarScreen(void)
     }
 }
 
-// Gameplay Screen Draw logic
-void DrawIniciarScreen(void)
+// Ending Screen Draw logic
+void DrawEndingScreen(void)
 {
-    // TODO: Draw GAMEPLAY screen here!
-   //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    //DrawTextEx(font, "GAMEPLAY SCREEN", (Vector2){ 20, 10 }, font.baseSize*3, 4, MAROON);
-    //DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
-    DrawTexture(back_tela4, 0, 0, WHITE);
+    // TODO: Draw ENDING screen here!
+    //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLUE);
+    //DrawTextEx(font, "RANKING", (Vector2){ 20, 10 }, font.baseSize*3, 4, DARKBLUE);
+    //DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+    DrawTexture(back_rank, 0, 0, WHITE);
 }
 
-// Gameplay Screen Unload logic
-void UnloadIniciarScreen(void)
+// Ending Screen Unload logic
+void UnloadEndingScreen(void)
 {
-    // TODO: Unload GAMEPLAY screen variables here!
+    // TODO: Unload ENDING screen variables here!
 }
 
-// Gameplay Screen should finish?
-int FinishIniciarScreen(void)
+// Ending Screen should finish?
+int FinishEndingScreen(void)
 {
     return finishScreen;
 }

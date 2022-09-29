@@ -105,7 +105,7 @@ void UpdateNomeScreen(void);
 void DrawNomeScreen(void);
 void UnloadNomeScreen(void);
 int FinishNomeScreen(void);
-FILE* fopen_e_teste(char* caminho, char* modo);
+// FILE* fopen_e_teste(char* caminho, char* modo);
 
 //----------------------------------------------------------------------------------
 // Iniciar Screen Functions Declaration
