@@ -42,12 +42,7 @@
 //----------------------------------------------------------------------------------
 // Funcao compara para o qsort
 //----------------------------------------------------------------------------------
-typedef struct 
-{
-     char nome[10];
-     int pontuacao;
-     float tempo;    
- } jogador;
+
 
 //----------------------------------------------------------------------------------
 // Funcao compara para o qsort
@@ -172,12 +167,12 @@ void UpdateJogoScreen(void)
     // TODO: Update GAMEPLAY screen variables here!
 	//int cont=0;
     // Press enter or tap to change to ENDING screen
-     if (IsKeyPressed(KEY_ENTER))
+     /*if (IsKeyPressed(KEY_ENTER))
      {
          finishScreen = 1;
          PlaySound(fxCoin);
-    // }
-    
+     }
+    */
     
     if (!gameOver)
     {
@@ -298,21 +293,31 @@ void UpdateJogoScreen(void)
             
         }
     }
-   else
-   {
-       if (IsKeyPressed(KEY_ENTER)&&name)
-       {
-           InitJogoScreen();
-           gameOver = false;
-        }
-   }
+   //else
+   //{
+     //  if (IsKeyPressed(KEY_ENTER))
+       //{
+         //  InitJogoScreen();
+          // gameOver = false;
+        //}
+   //}
 }
+typedef struct 
+{
+     char nome[10];
+     int pontuacao;
+     float tempo;    
+ } jogador;
+
 #define MAX_INPUT_CHARS     9
 char name[MAX_INPUT_CHARS + 1] = "\0";      // NOTE: One extra space required for null terminator char '\0'
 int letterCount = 0;
 bool mouseOnText = false;
+int cont_jogos=0;
+
 //caixa de texto
 Rectangle textBox = { 320, 300, 140, 35};
+
 
 // Gameplay Screen Draw logic
 void DrawJogoScreen(void)
@@ -324,43 +329,6 @@ void DrawJogoScreen(void)
      DrawTexture(back_jogo, 0, 0, WHITE);
      //ImageDrawRectangle(&alien, 20, 20, 30, 30, WHITE);
      
-      if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
-        else mouseOnText = false;
-
-        if (mouseOnText)
-        {
-            // Set the window's cursor to the I-Beam
-            SetMouseCursor(MOUSE_CURSOR_IBEAM);
-
-            // Get char pressed (unicode character) on the queue
-            int key = GetCharPressed();
-
-            // Check if more characters have been pressed on the same frame
-            while (key > 0)
-            {
-                // NOTE: Only allow keys in range [32..125]
-                if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS))
-                {
-                    name[letterCount] = (char)key;
-                    name[letterCount+1] = '\0'; // Add null terminator at the end of the string.
-                    letterCount++;
-                }
-
-                key = GetCharPressed();  // Check next character in the queue
-            }
-
-            if (IsKeyPressed(KEY_BACKSPACE))
-            {
-                letterCount--;
-                if (letterCount < 0) letterCount = 0;
-                name[letterCount] = '\0';
-            }
-        }
-        else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
-
-        if (mouseOnText) framesCounter++;
-        else framesCounter = 0;
-
 
       
       ClearBackground(RAYWHITE);
@@ -408,6 +376,45 @@ void DrawJogoScreen(void)
             //DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 320, 15, WHITE);
 
             //
+            if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
+        else mouseOnText = false;
+
+        if (mouseOnText)
+        {
+            // Set the window's cursor to the I-Beam
+            SetMouseCursor(MOUSE_CURSOR_IBEAM);
+
+            // Get char pressed (unicode character) on the queue
+            int key = GetCharPressed();
+
+            // Check if more characters have been pressed on the same frame
+            while (key > 0)
+            {
+                // NOTE: Only allow keys in range [32..125]
+                if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS))
+                {
+                    name[letterCount] = (char)key;
+                    name[letterCount+1] = '\0'; // Add null terminator at the end of the string.
+                    letterCount++;
+                }
+                
+
+                key = GetCharPressed();  // Check next character in the queue
+            }
+
+            if (IsKeyPressed(KEY_BACKSPACE))
+            {
+                letterCount--;
+                if (letterCount < 0) letterCount = 0;
+                name[letterCount] = '\0';
+            }
+        }
+        else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+
+        if (mouseOnText) framesCounter++;
+        else framesCounter = 0;
+
+            
             if (mouseOnText)
             {
                 //Aparece o underline de indicação para escrever o nome
@@ -425,18 +432,51 @@ void DrawJogoScreen(void)
                 DrawRectangleLines((int)textBox.x, (int)textBox.y, (int)textBox.width, (int)textBox.height, WHITE); 
             }
 
+
+            
+
             //Só sai do jogo se apertar enter dps do game over e se a variável name não for null
-            if (IsKeyPressed(KEY_ENTER)&&name)
+            if (IsKeyPressed(KEY_ENTER) && name)
             {
+                FILE *f;
+                f = fopen("dados_usuarios", "w+b");
+                jogador dados[10];
+
+                fread(&dados, sizeof(jogador), 10, f);
+                    cont_jogos++;
+                    for(int i=0; i<10; i++){
+                        if(dados[i].nome==name){
+                            if(dados[i].pontuacao<cont){
+                                dados[i].pontuacao=cont; 
+                                fseek(&dados, -1*sizeof(jogador), SEEK_CUR);
+                                fwrite(&dados, sizeof(jogador), 1, f);
+
+                            }
+                        }
+                        else{
+
+                            qsort(dados, 10, sizeof(jogador), compara);
+                            fseek(&dados, 0*sizeof(jogador), SEEK_END);
+                            fwrite(&dados, sizeof(jogador), 1, f);
+                        }
+
+                    }
+                    fclose(f);
+
+                
+                
+                    
+                
                 finishScreen = 1;
                 PlaySound(fxCoin);
             }
         } 
+}
         
 //Texture2D texture = LoadTextureFromImage(alien); 
 // DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 300, 15, WHITE);
 //DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), GetScreenWidth()/2 - MeasureText("SUA PONTUAÇÃO FOI %d", cont, 50)/2, GetScreenHeight()/2 - 50, 50, WHITE);
-}
+
 bool IsAnyKeyPressed()
 {
     bool keyPressed = false;
