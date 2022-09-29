@@ -172,10 +172,10 @@ void UpdateJogoScreen(void)
     // TODO: Update GAMEPLAY screen variables here!
 	//int cont=0;
     // Press enter or tap to change to ENDING screen
-    // if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    // {
-    //     finishScreen = 1;
-    //     PlaySound(fxCoin);
+     if (IsKeyPressed(KEY_ENTER))
+     {
+         finishScreen = 1;
+         PlaySound(fxCoin);
     // }
     
     
@@ -300,7 +300,7 @@ void UpdateJogoScreen(void)
     }
    else
    {
-       if (IsKeyPressed(KEY_ENTER))
+       if (IsKeyPressed(KEY_ENTER)&&name)
        {
            InitJogoScreen();
            gameOver = false;
@@ -324,6 +324,45 @@ void DrawJogoScreen(void)
      DrawTexture(back_jogo, 0, 0, WHITE);
      //ImageDrawRectangle(&alien, 20, 20, 30, 30, WHITE);
      
+      if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
+        else mouseOnText = false;
+
+        if (mouseOnText)
+        {
+            // Set the window's cursor to the I-Beam
+            SetMouseCursor(MOUSE_CURSOR_IBEAM);
+
+            // Get char pressed (unicode character) on the queue
+            int key = GetCharPressed();
+
+            // Check if more characters have been pressed on the same frame
+            while (key > 0)
+            {
+                // NOTE: Only allow keys in range [32..125]
+                if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS))
+                {
+                    name[letterCount] = (char)key;
+                    name[letterCount+1] = '\0'; // Add null terminator at the end of the string.
+                    letterCount++;
+                }
+
+                key = GetCharPressed();  // Check next character in the queue
+            }
+
+            if (IsKeyPressed(KEY_BACKSPACE))
+            {
+                letterCount--;
+                if (letterCount < 0) letterCount = 0;
+                name[letterCount] = '\0';
+            }
+        }
+        else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+
+        if (mouseOnText) framesCounter++;
+        else framesCounter = 0;
+
+
+      
       ClearBackground(RAYWHITE);
 
         if (!gameOver)
@@ -387,7 +426,7 @@ void DrawJogoScreen(void)
             }
 
             //Só sai do jogo se apertar enter dps do game over e se a variável name não for null
-            if (IsKeyPressed(KEY_ENTER) && name)
+            if (IsKeyPressed(KEY_ENTER)&&name)
             {
                 finishScreen = 1;
                 PlaySound(fxCoin);
@@ -397,6 +436,15 @@ void DrawJogoScreen(void)
 //Texture2D texture = LoadTextureFromImage(alien); 
 // DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 300, 15, WHITE);
 //DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), GetScreenWidth()/2 - MeasureText("SUA PONTUAÇÃO FOI %d", cont, 50)/2, GetScreenHeight()/2 - 50, 50, WHITE);
+}
+bool IsAnyKeyPressed()
+{
+    bool keyPressed = false;
+    int key = GetKeyPressed();
+
+    if ((key >= 32) && (key <= 126)) keyPressed = true;
+
+    return keyPressed;
 }
 
 
