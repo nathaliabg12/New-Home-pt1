@@ -42,6 +42,12 @@
 //----------------------------------------------------------------------------------
 // Funcao compara para o qsort
 //----------------------------------------------------------------------------------
+typedef struct jogador
+{
+     char nome[10];
+     int pontuacao;
+     float tempo;    
+ }jogador;
 
 
 //----------------------------------------------------------------------------------
@@ -302,12 +308,6 @@ void UpdateJogoScreen(void)
         //}
    //}
 }
-typedef struct 
-{
-     char nome[10];
-     int pontuacao;
-     float tempo;    
- } jogador;
 
 #define MAX_INPUT_CHARS     9
 char name[MAX_INPUT_CHARS + 1] = "\0";      // NOTE: One extra space required for null terminator char '\0'
@@ -439,7 +439,7 @@ void DrawJogoScreen(void)
             if (IsKeyPressed(KEY_ENTER) && name)
             {
                 FILE *f;
-                f = fopen("dados_usuarios", "w+b");
+                f = fopen("dados_usuarios.bin", "w+b");
                 jogador dados[10];
 
                 fread(&dados, sizeof(jogador), 10, f);
@@ -448,7 +448,7 @@ void DrawJogoScreen(void)
                         if(dados[i].nome==name){
                             if(dados[i].pontuacao<cont){
                                 dados[i].pontuacao=cont; 
-                                fseek(&dados, -1*sizeof(jogador), SEEK_CUR);
+                                //fseek(&dados, -1*sizeof(jogador), SEEK_CUR);
                                 fwrite(&dados, sizeof(jogador), 1, f);
 
                             }
@@ -456,7 +456,7 @@ void DrawJogoScreen(void)
                         else{
 
                             qsort(dados, 10, sizeof(jogador), compara);
-                            fseek(&dados, 0*sizeof(jogador), SEEK_END);
+                            //fseek(&dados, 0*sizeof(jogador), SEEK_END);
                             fwrite(&dados, sizeof(jogador), 1, f);
                         }
 
