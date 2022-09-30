@@ -349,7 +349,7 @@ static void UpdateDrawFrame(void)
             {
                 UpdateCreditosScreen();
 
-                if (FinishCreditosScreen() == 1) TransitionToScreen(TITULO);
+                if (FinishCreditosScreen() == 2) TransitionToScreen(TITULO);
 
             } break;
             default: break;

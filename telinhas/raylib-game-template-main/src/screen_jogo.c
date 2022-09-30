@@ -40,7 +40,7 @@
 #define BRICKS_PER_LINE 20
 
 //----------------------------------------------------------------------------------
-// Funcao compara para o qsort
+// Struct
 //----------------------------------------------------------------------------------
 typedef struct jogador
 {
@@ -49,23 +49,6 @@ typedef struct jogador
     float tempo;
 } jogador;
 
-//----------------------------------------------------------------------------------
-// Funcao compara para o qsort
-//----------------------------------------------------------------------------------
-int compara(const void *a, const void *b)
-{
-    jogador *n1 = (jogador *)a;
-    jogador *n2 = (jogador *)b;
-
-    if (n1->pontuacao == n2->pontuacao)
-    {
-        return n1->tempo - n2->tempo;
-    }
-    else
-    {
-        return -(n1->pontuacao - n2->pontuacao);
-    }
-}
 
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
@@ -305,7 +288,7 @@ bool mouseOnText = false;
 int cont_jogos = 0;
 
 // caixa de texto
-Rectangle textBox = {440, 297, 140, 35};
+Rectangle textBox = {440, 240, 235, 35};
 
 // Gameplay Screen Draw logic
 void DrawJogoScreen(void)
@@ -351,9 +334,9 @@ void DrawJogoScreen(void)
     {
 
         
-        DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), 130, 220, 30, WHITE);
-        DrawText(TextFormat("Seu tempo foi: %.0f s", timing), 130, 260, 30, WHITE);
-        DrawText(TextFormat("Digite seu nickname: "), 130, 300, 30, WHITE);
+        DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), 130, 160, 30, WHITE);
+        DrawText(TextFormat("Seu tempo foi: %.0f s", timing), 130, 200, 30, WHITE);
+        DrawText(TextFormat("Digite seu nickname: "), 130, 240, 30, WHITE);
 
         // Caixa de texto inteiro
         // DrawRectangleRec(textBox, WHITE);
@@ -449,7 +432,7 @@ void DrawJogoScreen(void)
             {
                 if(acheiPosicao == 0 && dados.pontuacao == cont && dados.tempo < timing){
                     ultimo = dados;
-                    printf("\n\nSai: %s %f %d\n\nEntra: %s %f %d\n\n", dados.nome, dados.tempo, dados.pontuacao, name, timing, cont);
+                    //printf("\n\nSai: %s %f %d\n\nEntra: %s %f %d\n\n", dados.nome, dados.tempo, dados.pontuacao, name, timing, cont);
                     strcpy(dados.nome,name);
                     dados.tempo = timing;
                     dados.pontuacao = cont;
@@ -479,7 +462,7 @@ void DrawJogoScreen(void)
                 }
                 idxI++;
             }
-            printf("\n\n\n\n%d\n\n\n\n", idx);
+            //printf("\n\n\n\n%d\n\n\n\n", idx);
             // cont_jogos++;
 
             // qsort(dados, 10, sizeof(jogador), compara);
