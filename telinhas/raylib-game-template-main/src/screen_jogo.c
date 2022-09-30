@@ -370,7 +370,7 @@ void DrawJogoScreen(void)
     else
     {
         DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), 130, 220, 30, WHITE);
-        DrawText(TextFormat("Seu tempo foi: %.0f s", (timing * 1000)), 130, 260, 30, WHITE);
+        DrawText(TextFormat("Seu tempo foi: %.0f s", timing), 130, 260, 30, WHITE);
         DrawText(TextFormat("Digite seu nickname: "), 130, 300, 30, WHITE);
 
         // Caixa de texto inteiro

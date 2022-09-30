@@ -25,6 +25,18 @@
 
 #include "raylib.h"
 #include "screens.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include "string.h"
+
+typedef struct jogador
+{
+    char nome[10];
+    int pontuacao;
+    float tempo;
+} jogador;
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
@@ -66,11 +78,41 @@ void UpdateEndingScreen(void)
 // Ending Screen Draw logic
 void DrawEndingScreen(void)
 {
+    
+    DrawTexture(back_rank, 0, 0, WHITE);
+    
+    FILE *g;
+    g = fopen("dados_usuarios.bin", "rb");
+    jogador ranking; 
+    //jogador imprimir[10];
+    int cont_jog=0;
+    int pos_tela=0;
+
+    while(fread(&ranking, sizeof(jogador), 1, g)>0){
+       /* strcpy(ranking.nome, imprimir[cont_jog].nome);
+        ranking.pontuacao=imprimir[cont_jog].pontuacao;
+        ranking.tempo=imprimir[cont_jog].tempo;
+        */
+       DrawText(TextFormat("Nome: %s    Pontuação: %d     Tempo: %.0f\n", ranking.nome, ranking.pontuacao, ranking.tempo), 130, 220+pos_tela, 20, WHITE);
+        pos_tela+=20;
+
+        //cont_jog++;
+    }
+    fclose(g);
+    
+    //for(int j=0; j<10; j++){
+     //   
+    //}
+    
     // TODO: Draw ENDING screen here!
     //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLUE);
     //DrawTextEx(font, "RANKING", (Vector2){ 20, 10 }, font.baseSize*3, 4, DARKBLUE);
     //DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
-    DrawTexture(back_rank, 0, 0, WHITE);
+    
+    
+    
+    
+    
 }
 
 // Ending Screen Unload logic
