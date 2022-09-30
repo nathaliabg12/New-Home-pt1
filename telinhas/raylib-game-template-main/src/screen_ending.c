@@ -68,7 +68,7 @@ void UpdateEndingScreen(void)
     // TODO: Update ENDING screen variables here!
 
     // Press enter or tap to return to TITLE screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+    if (IsKeyPressed(KEY_ENTER))
     {
         finishScreen = 1;
         PlaySound(fxCoin);
@@ -85,22 +85,18 @@ void DrawEndingScreen(void)
     g = fopen("dados_usuarios.bin", "rb");
     jogador ranking; 
     //jogador imprimir[10];
-    int cont_jog=0;
+    //int cont_jog=0;
     int pos_tela=0;
 
 
     //Leitura do arquivo
     while(fread(&ranking, sizeof(jogador), 1, g)>0){
-       /* strcpy(ranking.nome, imprimir[cont_jog].nome);
-        ranking.pontuacao=imprimir[cont_jog].pontuacao;
-        ranking.tempo=imprimir[cont_jog].tempo;
-        */
 
        //Imprimindo os nomes pontuações e tempos na tela um abaixo do outro
        DrawText(TextFormat("Nome: %s    Pontuação: %d     Tempo: %.0f\n", ranking.nome, ranking.pontuacao, ranking.tempo), 130, 220+pos_tela, 20, WHITE);
         pos_tela+=20;
 
-        //cont_jog++;
+        
     }
     fclose(g);
     
