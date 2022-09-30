@@ -65,8 +65,8 @@ int main(void)
 
     // Load global data (assets that must be available in all screens, i.e. font)
     font = LoadFont("resources/mecha.png");
-    music = LoadMusicStream("resources/ambient.ogg");
-    fxCoin = LoadSound("resources/coin.wav");
+    music = LoadMusicStream("resources/odisseia.mp3");
+    fxCoin = LoadSound("resources/move.mp3");
 
     SetMusicVolume(music, 1.0f);
     PlayMusicStream(music);

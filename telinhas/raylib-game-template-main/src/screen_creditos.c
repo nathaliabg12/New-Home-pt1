@@ -45,7 +45,7 @@ void InitCreditosScreen(void)
     // TODO: Initialize Creditos screen variables here!
     framesCounter = 0;
     finishScreen = 0;
-    resback_credito = LoadImage("resources/fundo.png");
+    resback_credito = LoadImage("resources/creditos.png");
     ImageResize(&resback_credito, GetScreenWidth(), GetScreenHeight());
     back_credito = LoadTextureFromImage(resback_credito);
 }
@@ -68,8 +68,8 @@ void DrawCreditosScreen(void)
 {
     // TODO: Draw Resultado screen here!
    DrawTexture(back_credito, 0, 0, WHITE);
-   // DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    DrawTextEx(font, "CREDITOS", (Vector2){ 20, 10 }, font.baseSize*3, 4, WHITE);
+//    // DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
+//     DrawTextEx(font, "CREDITOS", (Vector2){ 20, 10 }, font.baseSize*3, 4, WHITE);
    // DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
      
 }

@@ -168,15 +168,6 @@ float timing = 0;
 // Gameplay Screen Update logic
 void UpdateJogoScreen(void)
 {
-    // TODO: Update GAMEPLAY screen variables here!
-    // int cont=0;
-    // Press enter or tap to change to ENDING screen
-    /*if (IsKeyPressed(KEY_ENTER))
-    {
-        finishScreen = 1;
-        PlaySound(fxCoin);
-    }
-   */
 
     if (!gameOver)
     {
@@ -305,14 +296,6 @@ void UpdateJogoScreen(void)
             }
         }
     }
-    // else
-    //{
-    //   if (IsKeyPressed(KEY_ENTER))
-    //{
-    //   InitJogoScreen();
-    //  gameOver = false;
-    //}
-    //}
 }
 
 #define MAX_INPUT_CHARS 9
@@ -322,21 +305,18 @@ bool mouseOnText = false;
 int cont_jogos = 0;
 
 // caixa de texto
-Rectangle textBox = {320, 300, 140, 35};
+Rectangle textBox = {440, 297, 140, 35};
 
 // Gameplay Screen Draw logic
 void DrawJogoScreen(void)
 {
-    // TODO: Draw GAMEPLAY screen here!
-    // DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    // DrawTextEx(font, "JOGO", (Vector2){ 20, 10 }, font.baseSize*3, 4, MAROON);
-    // DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
     DrawTexture(back_jogo, 0, 0, WHITE);
     // ImageDrawRectangle(&alien, 20, 20, 30, 30, WHITE);
 
     ClearBackground(RAYWHITE);
 
     if (!gameOver)
+    // if (false)
     {
         // Draw player bar
         DrawRectangle(player.position.x - player.size.x / 2, player.position.y - player.size.y / 2, player.size.x, player.size.y, WHITE);
@@ -369,6 +349,8 @@ void DrawJogoScreen(void)
     }
     else
     {
+
+        
         DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), 130, 220, 30, WHITE);
         DrawText(TextFormat("Seu tempo foi: %.0f s", timing), 130, 260, 30, WHITE);
         DrawText(TextFormat("Digite seu nickname: "), 130, 300, 30, WHITE);
@@ -376,9 +358,8 @@ void DrawJogoScreen(void)
         // Caixa de texto inteiro
         // DrawRectangleRec(textBox, WHITE);
 
-        DrawText(name, (int)textBox.x + 5, (int)textBox.y + 8, 45, WHITE);
+        DrawText(name, (int)textBox.x + 5, (int)textBox.y + 5, 30, WHITE);
 
-        // DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 320, 15, WHITE);
 
         //
         if (CheckCollisionPointRec(GetMousePosition(), textBox))
@@ -432,10 +413,10 @@ void DrawJogoScreen(void)
             {
                 // Draw blinking underscore char
                 if (((framesCounter / 20) % 2) == 0)
-                    DrawText("_", (int)textBox.x + 8 + MeasureText(name, 40), (int)textBox.y + 12, 40, BLACK);
+                    DrawText("_", (int)textBox.x + 8 + MeasureText(name, 40), (int)textBox.y + 12, 40, WHITE);
             }
             else
-                DrawText("Press BACKSPACE to delete chars...", 400, 360, 10, BLUE);
+                DrawText("Press BACKSPACE to delete chars...", 400, 360, 10, WHITE);
         }
         else
         {
@@ -446,6 +427,7 @@ void DrawJogoScreen(void)
         // Só sai do jogo se apertar enter dps do game over e se a variável name não for null
         if (IsKeyPressed(KEY_ENTER) && name)
         {
+            // Abre o arquivo
             FILE *f;
             f = fopen("dados_usuarios.bin", "r+b");
             if (f == NULL)
@@ -460,6 +442,8 @@ void DrawJogoScreen(void)
             }
             jogador dados, ultimo;
 
+
+            //Variável para verificar se acha a posição 
             int acheiPosicao = 0, idx = -1, idxI = 0;
             while (fread(&dados, sizeof(jogador), 1, f) > 0)
             {
@@ -506,10 +490,6 @@ void DrawJogoScreen(void)
         }
     }
 }
-
-// Texture2D texture = LoadTextureFromImage(alien);
-//  DrawText(TextFormat("INPUT CHARS: %i/%i", letterCount, MAX_INPUT_CHARS), 290, 300, 15, WHITE);
-// DrawText(TextFormat("SUA PONTUAÇÃO FOI: %d", cont), GetScreenWidth()/2 - MeasureText("SUA PONTUAÇÃO FOI %d", cont, 50)/2, GetScreenHeight()/2 - 50, 50, WHITE);
 
 bool IsAnyKeyPressed()
 {

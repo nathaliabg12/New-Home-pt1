@@ -78,7 +78,7 @@ void UpdateEndingScreen(void)
 // Ending Screen Draw logic
 void DrawEndingScreen(void)
 {
-    
+    //Abertura de arquivo
     DrawTexture(back_rank, 0, 0, WHITE);
     
     FILE *g;
@@ -88,30 +88,21 @@ void DrawEndingScreen(void)
     int cont_jog=0;
     int pos_tela=0;
 
+
+    //Leitura do arquivo
     while(fread(&ranking, sizeof(jogador), 1, g)>0){
        /* strcpy(ranking.nome, imprimir[cont_jog].nome);
         ranking.pontuacao=imprimir[cont_jog].pontuacao;
         ranking.tempo=imprimir[cont_jog].tempo;
         */
+
+       //Imprimindo os nomes pontuações e tempos na tela um abaixo do outro
        DrawText(TextFormat("Nome: %s    Pontuação: %d     Tempo: %.0f\n", ranking.nome, ranking.pontuacao, ranking.tempo), 130, 220+pos_tela, 20, WHITE);
         pos_tela+=20;
 
         //cont_jog++;
     }
     fclose(g);
-    
-    //for(int j=0; j<10; j++){
-     //   
-    //}
-    
-    // TODO: Draw ENDING screen here!
-    //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLUE);
-    //DrawTextEx(font, "RANKING", (Vector2){ 20, 10 }, font.baseSize*3, 4, DARKBLUE);
-    //DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
-    
-    
-    
-    
     
 }
 
